@@ -5,28 +5,19 @@ and read me (a) your name and (b) the top headline on the front page
 of Reddit. Some time after I receive the call, email me the code and
 a brief description of your solution.
 """
-import urllib2
-import bs4
+import sys
+from grabHeadline import gH
+from parseCSV import pF
 
-# Get the title text from the top story on Reddit.com
-response = urllib2.urlopen("http://www.reddit.com/")
-dom = bs4.BeautifulSoup(response.read())
-a = dom.select("div.content div.spacer #siteTable p.title a.title")[0]
-title = a.get_text()
+filename = 'auth.txt'
 
-# Create object for Twilio
+# Parse csv auth file
+auth = pF(filename)
 
+# Get headline string
+headline = gH()
+
+if (headline.find('ERROR') != -1):
+    sys.exit(headline)
 
 # Make call with Twilio
-from twilio.rest import TwilioRestClient
- 
-account_sid = raw_input("Account SID:")
-auth_token = raw_input("Auth Token:")
-target = raw_input("Target (eg. +13334445555):")
-
-client = TwilioRestClient(account_sid, auth_token)
-
-call = client.calls.create(to=target,
-                           from_="+14157234236",
-                           url="http://twimlets.com/holdmusic?Bucket=com.twilio.music.ambient")
-print call.sid
