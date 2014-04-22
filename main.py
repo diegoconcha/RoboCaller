@@ -22,8 +22,8 @@ from parseCSV import pF
 from makeCall import mC
 
 filename = 'auth.txt'
-#target ='+16175130992'
-target ='+13057209243'
+target ='+16175130992'
+#target ='+13057209243'
 
 def main(filename,target):
     # Parse csv auth file
@@ -54,8 +54,8 @@ def main(filename,target):
 # Start the scheduler
 sched = Scheduler()
 sched.start()
-
-job = sched.add_date_job(main, datetime(2014, 4, 22, 13, 24, 0), [filename,target])
+local2UTC = datetime.utcnow()-datetime.now() # need to finish
+job = sched.add_date_job(main, datetime(2014, 4, 22, 14, 5, 0), [filename,target])
 
 sched.print_jobs()
 
