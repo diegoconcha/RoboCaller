@@ -10,9 +10,11 @@ To launch HTTP tunneling:
 
 To launch webserver:
 python runServer.py
+
+https://docs.python.org/2.7/library/subprocess.html#using-the-subprocess-module
+http://pythonhosted.org/APScheduler/dateschedule.html
 """
-import sys
-from grabHeadline import gH
+import sys, subprocess, time, os
 from parseCSV import pF
 from makeCall import mC
 
@@ -23,15 +25,23 @@ target ='+13057209243'
 # Parse csv auth file
 auth = pF(filename)
 
-# Get headline string
-headline = gH()
+# Launch ngrok
+ngrok = subprocess.Popen('./ngrok -subdomain rcxml 5000', shell=True)
+print 'ngrok PID: %s' % ngrok.pid
 
-if (headline.find('ERROR') != -1):
-    sys.exit(headline)
+# Launch webserver
+server = subprocess.Popen('python runServer.py', shell=True)
+print 'Server PID: %s' % server.pid
 
-# Pass headline to webserver
-
-# Make call with Twilio
+# Make call with Twilio API
 mC(auth['account_sid'],auth['auth_token'],target)
 
-print "Call scheduled"
+print "Call Queued Up"
+
+time.sleep(60) # Twilio default call timeout is 60 sec
+#kill = raw_input("Kill proceses? (y/n):")
+#while kill in ['n']:
+#    kill = raw_input("Kill proceses? (y/n):")
+
+ngrok.kill() # kill ngrok process
+os.system('killall -KILL Python') # kill server
