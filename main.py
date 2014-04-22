@@ -26,7 +26,7 @@ from getLocalFromUTC import utc2local
 filename = 'auth.txt'
 #targetNumber ='+16175130992'
 targetNumber ='+13057209243'
-targetTimeUTC = '2014-04-22 19:29:00'
+targetTimeUTC = '2014-04-22 20:43:00'
 ngrokURL='http://rcxml.ngrok.com'
 
 def main(filename,targetNumber,ngrokURL):
