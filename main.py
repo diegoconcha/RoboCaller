@@ -27,8 +27,9 @@ filename = 'auth.txt'
 #targetNumber ='+16175130992'
 targetNumber ='+13057209243'
 targetTimeUTC = '2014-04-22 19:29:00'
+ngrokURL='http://rcxml.ngrok.com'
 
-def main(filename,targetNumber):
+def main(filename,targetNumber,ngrokURL):
     # Parse csv auth file
     auth = pF(filename)
 
@@ -41,7 +42,7 @@ def main(filename,targetNumber):
     print 'Server PID: %s' % server.pid
 
     # Make call with Twilio API
-    mC(auth['account_sid'],auth['auth_token'],target)
+    mC(auth['account_sid'],auth['auth_token'],targetNumber,ngrokURL)
 
     print "Call Queued Up"
 
@@ -61,7 +62,7 @@ sched.start()
 # Convert UTC target to local time
 localTarget = utc2local(datetime.strptime(targetTimeUTC,'%Y-%m-%d %H:%M:%S'))
 
-job = sched.add_date_job(main, localTarget, [filename,targetNumber])
+job = sched.add_date_job(main, localTarget, [filename,targetNumber,ngrokURL])
 
 sched.print_jobs()
 
