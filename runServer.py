@@ -16,7 +16,7 @@ def index():
     if (headline.find('ERROR') != -1):
         sys.exit(headline)
 
-    resp.say("My name is Diego Concha. The Reddit headline is %s" % headline)
+    resp.say('My name is Diego Concha. The Reddit headline is %s. Have a fabulous day. Goodbye.' % headline)
 
     return str(resp)
 

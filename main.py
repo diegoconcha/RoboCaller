@@ -14,18 +14,21 @@ python runServer.py
 https://docs.python.org/2.7/library/subprocess.html#using-the-subprocess-module
 http://pythonhosted.org/APScheduler/dateschedule.html
 http://stackoverflow.com/questions/5835600/apscheduler-not-starting
+https://docs.python.org/2.7/library/datetime.html#strftime-strptime-behavior
 """
 import sys, subprocess, time, os
 from datetime import datetime
 from apscheduler.scheduler import Scheduler
 from parseCSV import pF
 from makeCall import mC
+from getLocalFromUTC import utc2local
 
 filename = 'auth.txt'
-target ='+16175130992'
-#target ='+13057209243'
+#targetNumber ='+16175130992'
+targetNumber ='+13057209243'
+targetTimeUTC = '2014-04-22 19:29:00'
 
-def main(filename,target):
+def main(filename,targetNumber):
     # Parse csv auth file
     auth = pF(filename)
 
@@ -54,10 +57,15 @@ def main(filename,target):
 # Start the scheduler
 sched = Scheduler()
 sched.start()
-local2UTC = datetime.utcnow()-datetime.now() # need to finish
-job = sched.add_date_job(main, datetime(2014, 4, 22, 14, 5, 0), [filename,target])
+
+# Convert UTC target to local time
+localTarget = utc2local(datetime.strptime(targetTimeUTC,'%Y-%m-%d %H:%M:%S'))
+
+job = sched.add_date_job(main, localTarget, [filename,targetNumber])
 
 sched.print_jobs()
+
+print 'Current time is %s' % datetime.now()
 
 # Keep scheduler alive until you hit Ctrl+C!
 while True:
